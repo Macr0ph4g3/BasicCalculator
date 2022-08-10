@@ -69,18 +69,24 @@ for (let i = 0; i < clear.length; i++) {
 for (let i = 0; i < answer.length; i++) {
     answer[i].addEventListener('click', function(event) {
         console.log(`Doing math! ${calculator.firstNumber} ${calculator.operator} ${calculator.secondNumber}`);
-        parseFloat(calculator.firstNumber);
-        parseFloat(calculator.secondNumber);
-        contents[0].innerHTML = add(calculator.firstNumber, calculator.secondNumber);
+        contents[0].innerHTML = operate(calculator.firstNumber, calculator.operator, calculator.secondNumber);
+        
     })
 
 }
 
 // Math Functions
 
+
+// const calculator = {
+//     firstNumber: ``,
+//     operator: null,
+//     secondNumber: ``,
+//  }
+
+
 function add(num1, num2) {
-    parseFloat()
-	let answer = (num1 += num2);
+	let answer = parseFloat(num1) + parseFloat(num2);
     calculator.firstNumber = answer;
     calculator.operator = null
     calculator.secondNumber = null
@@ -90,6 +96,11 @@ function add(num1, num2) {
 
 function subtract(num1, num2) {
 	let answer = (num1 - num2);
+    calculator.firstNumber = answer;
+    calculator.operator = null
+    calculator.secondNumber = null
+    contents[0].innerHTML = answer
+
   return answer;
 };
 
@@ -97,16 +108,26 @@ function divide(num1, num2) {
     
     if (num2 == 0) {
         console.log('Impossible')
+        contents[0].innerHTML = 'Impossible';
+        console.log('test')
+        return `You Fool!`
     }   else {
     
     let answer = (num1 / num2);
-    
+    calculator.firstNumber = answer;
+    calculator.operator = null
+    calculator.secondNumber = null
+    contents[0].innerHTML = answer
     return answer;
     }
 };
 
 function multiply(num1, num2) {
     let answer = (num1 * num2)
+    calculator.firstNumber = answer;
+    calculator.operator = null
+    calculator.secondNumber = null
+    contents[0].innerHTML = answer
     return answer;
 };
 
