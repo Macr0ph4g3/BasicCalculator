@@ -1,136 +1,141 @@
+// New script
 
 // Event Listeners for buttons
 
-const contents = document.getElementsByClassName('text');
+const display = document.getElementById('display');
 const numbers = document.getElementsByClassName('number');
 const operators = document.getElementsByClassName('operator');
-const history = document.getElementsByClassName('history');
-const clear = document.getElementsByClassName('clear');
-const answer = document.getElementsByClassName('equals');
+const history = document.getElementById('history');
+const clear = document.getElementById('clear');
+const answer = document.getElementById('equals')
+const decimal = document.getElementById('decimal')
+const buttons = document.getElementsByClassName('button')
+const backspace = document.getElementById('backspace')
 
 // Calculator Object
+
 const calculator = {
-    firstNumber: ``,
-    operator: null,
-    secondNumber: ``,
- }
- 
-
-//Loop to update Display with numbers
-    for (let i = 0; i < numbers.length; i++) {
-        numbers[i].addEventListener('click', function(event) {    
-let display = contents[0].innerHTML
-            if( calculator.operator != null ) {
-                let value = display + numbers[i].innerHTML;     
-                contents[0].innerHTML = value;
-                calculator.secondNumber = contents[0].innerHTML;
-                console.log(`Calculator Second Number is now set to ${calculator.secondNumber}`)
-                history[0].innerHTML = `${calculator.firstNumber} ${calculator.operator}`
-
-          }
-                else {
-         let value = display + numbers[i].innerHTML;
-         contents[0].innerHTML = value;
-         calculator.firstNumber = contents[0].innerHTML;
-         console.log(`Calculator First Number is now set to ${calculator.firstNumber}`)
-         history[0].innerHTML = `${calculator.firstNumber}`
-
-                }
-     })
+    numOne: ``,
+    operator: ``,
+    numTwo: ``,
 }
 
-//Loop to catch operator press and log variable
-    for (let i = 0; i < operators.length; i++) {
-        operators[i].addEventListener('click', function(event) {
-            console.log(`You have pressed: ${operators[i].innerHTML}`)
-            calculator.operator = operators[i].innerHTML
-            console.log(`Calculator Operator is now set to ${calculator.operator}`)
-            history[0].innerHTML = `${calculator.firstNumber} ${calculator.operator}`
-            contents[0].innerHTML = ``
-        } ) 
+//Keep display and numbers short
+// if(calculator.numOne.length >=12 ) {
+
+// }
+//Loop to update Display with numbers
+for (let i = 0; i < numbers.length; i++) {
+    numbers[i].addEventListener('click', function(event) {
+let pressedNum = numbers[i].innerHTML; 
+        if ( (calculator.operator == ``) && ( calculator.numTwo == `` ) ) {
+            calculator.numOne = calculator.numOne + pressedNum;
+            display.innerHTML = calculator.numOne
+            console.log(`button clicked! setting num one ${calculator.numOne}`);
+
+        }  else {
+            calculator.numTwo = calculator.numTwo + pressedNum
+            display.innerHTML = calculator.numTwo
+            console.log(`button clicked! setting num two to ${calculator.numTwo}`);
+
+        }
+    }
+    )
+}
+
+//Adding Decimal points.
+decimal.addEventListener(`click`, function(event) {
+    console.log('test')
+    if ( (calculator.numTwo == ``) && (calculator.numOne % 1 == 0) ) {
+        console.log(`Numtwo is empty`);
+        let decimalNum = parseFloat(calculator.numOne);
+        calculator.numOne = decimalNum += "."
+        display.innerHTML = calculator.numOne;
+
     }
 
+    if ( (calculator.numTwo !== ``) && (calculator.numTwo % 1 == 0) ) {
+        let decimalNum = parseFloat(calculator.numTwo);
+        calculator.numTwo = decimalNum +="."
+        display.innerHTML = calculator.numTwo
+    }
+})
 
-//Clear button logic
-for (let i = 0; i < clear.length; i++) {
-    clear[i].addEventListener('click', function(event) {
+//Loop to update Operator
+for (let i = 0; i < operators.length; i++) {
+    operators[i].addEventListener('click', function(event) {
+    console.log( `${calculator.numOne} ${calculator.operator}`)
+    if ( calculator.operator !== `` && calculator.numTwo !== ``) {
+        console.log(`Performing Operate: ${calculator.numOne} ${calculator.operate} ${calculator.numTwo}`)
+        operate(calculator.numOne, calculator.operator, calculator.numTwo)
+        calculator.numTwo = ``
+        calculator.operator = operators[i].innerHTML
+        history.innerHTML = `${calculator.numOne} ${calculator.operator}`
+        display.innerHTML = calculator.numTwo
+
+    } else if (calculator.operator !== `` && calculator.numTwo == `` ){
+        calculator.operator = operators[i].innerHTML
+        history.innerHTML = `${calculator.numOne} ${calculator.operator}`
+    } else if (calculator.operator == `` && calculator.numTwo == ``) {
+            calculator.operator = operators[i].innerHTML
+            history.innerHTML = `${calculator.numOne} ${calculator.operator}`
+            
+        
+    }
+    })
+}
+
+//clear button logic
+
+
+    clear.addEventListener('click', function(event) {
     console.log("Clearing calculator object...!");
-    calculator.firstNumber = ``;
-    calculator.operator = null;
-    calculator.secondNumber = ``;
+    calculator.numOne = ``;
+    calculator.operator = ``;
+    calculator.numTwo = ``;
     console.log('Cleared calculator object, clearing display...');
-    contents[0].innerHTML = ``;
-    history[0].innerHTML = ``;
+    display.innerHTML = ``;
+    history.innerHTML = ``;
     console.log('Cleared display. All set for new data');
 })
-}
+//backspace button
+
+    backspace.addEventListener('click', function(event) {
+        if ( (calculator.operator == ``) && ( calculator.numTwo == `` ) ) {
+            let slicedNumOne = calculator.numOne.toString().slice(0, -1)
+            console.log(`Sliced numOne. It's now ${slicedNumOne}`)
+            calculator.numOne = slicedNumOne
+            display.innerHTML = slicedNumOne
+        } else { 
+            let slicedNumTwo = calculator.numTwo.toString().slice(0, -1)
+            console.log(`Sliced numTwo. It's now ${slicedNumTwo}`)
+            display.innerHTML = calculator.numTwo
+            calculator.numTwo = slicedNumTwo
+            display.innerHTML = slicedNumTwo
+
+        }
+    }) 
 
 //Answer button logic
-for (let i = 0; i < answer.length; i++) {
-    answer[i].addEventListener('click', function(event) {
-        console.log(`Doing math! ${calculator.firstNumber} ${calculator.operator} ${calculator.secondNumber}`);
-        contents[0].innerHTML = operate(calculator.firstNumber, calculator.operator, calculator.secondNumber);
-        
+
+    answer.addEventListener('click', function(event) {
+        console.log(`Pressed Equals: ${calculator.numOne} ${calculator.operator} ${calculator.numTwo}`);
+        if (calculator.numTwo == 0) {
+            console.log('Impossible')
+            display.innerHTML = 'Impossible';
+            console.log('test')
+            calculator.numTwo = ``;
+            return `You Fool!`;
+        }           
+            operate(calculator.numOne, calculator.operator, calculator.numTwo);
+            calculator.numTwo = ``
+        display.innerHTML = calculator.numTwo
+        calculator.operator = ``
+
     })
 
-}
 
-// Math Functions
-
-
-// const calculator = {
-//     firstNumber: ``,
-//     operator: null,
-//     secondNumber: ``,
-//  }
-
-
-function add(num1, num2) {
-	let answer = parseFloat(num1) + parseFloat(num2);
-    calculator.firstNumber = answer;
-    calculator.operator = null
-    calculator.secondNumber = null
-    contents[0].innerHTML = answer
-  return answer;
-};
-
-function subtract(num1, num2) {
-	let answer = (num1 - num2);
-    calculator.firstNumber = answer;
-    calculator.operator = null
-    calculator.secondNumber = null
-    contents[0].innerHTML = answer
-
-  return answer;
-};
-
-function divide(num1, num2) {
-    
-    if (num2 == 0) {
-        console.log('Impossible')
-        contents[0].innerHTML = 'Impossible';
-        console.log('test')
-        return `You Fool!`
-    }   else {
-    
-    let answer = (num1 / num2);
-    calculator.firstNumber = answer;
-    calculator.operator = null
-    calculator.secondNumber = null
-    contents[0].innerHTML = answer
-    return answer;
-    }
-};
-
-function multiply(num1, num2) {
-    let answer = (num1 * num2)
-    calculator.firstNumber = answer;
-    calculator.operator = null
-    calculator.secondNumber = null
-    contents[0].innerHTML = answer
-    return answer;
-};
-
+//operate
 function operate(num1, operator, num2) {
     if (operator == 'x'){
         return multiply(num1, num2)
@@ -147,3 +152,72 @@ function operate(num1, operator, num2) {
     } 
 
 }
+
+// Math Functions
+function add(num1, num2) {
+	let answer = parseFloat(num1) + parseFloat(num2);
+    calculator.numOne = answer;
+    display.innerHTML = answer
+    history.innerHTML = `${answer} ${calculator.operator}`
+  return answer;
+};
+
+function subtract(num1, num2) {
+	let answer = (num1 - num2);
+    calculator.numOne = answer;
+    display.innerHTML = answer
+    history.innerHTML = `${answer} ${calculator.operator}`
+  return answer;
+};
+
+function divide(num1, num2) {
+    
+   
+    let answer = (num1 / num2);
+    calculator.numOne = answer;
+    display.innerHTML = answer
+    history.innerHTML = `${answer} ${calculator.operator}`
+    calculator.numTwo = display.innerHTML
+    return answer;
+    
+};
+
+function multiply(num1, num2) {
+    let answer = (num1 * num2)
+    calculator.numOne = answer;
+    display.innerHTML = answer
+    history.innerHTML = `${answer} ${calculator.operator}`
+    calculator.numTwo = display.innerHTML
+    return answer;
+};
+
+
+//Hover-over and hover-leave style changes
+//
+for (let i = 0; i < buttons.length; i++) {
+    buttons[i].addEventListener('mouseover', function(event) {
+        buttons[i].style.backgroundColor = "#525252";
+    }
+)
+}
+
+for (let i = 0; i < buttons.length; i++) {
+    buttons[i].addEventListener('mouseleave', function(event) {
+        buttons[i].style.backgroundColor = "#454545";
+    }
+)
+}
+answer.addEventListener('mouseover', function(event) {
+    answer.style.backgroundColor = "#76c347";
+}
+)
+answer.addEventListener('mouseleave', function(event) {
+    answer.style.backgroundColor = "#6db442";
+}
+)
+clear.addEventListener('mouseover', function(event) {
+    clear.style.backgroundColor = "#f28d81"
+})
+clear.addEventListener('mouseleave', function(event) {
+    clear.style.backgroundColor = "#DD8378"
+})
