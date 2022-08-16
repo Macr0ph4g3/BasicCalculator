@@ -7,10 +7,11 @@ const numbers = document.getElementsByClassName('number');
 const operators = document.getElementsByClassName('operator');
 const history = document.getElementById('history');
 const clear = document.getElementById('clear');
-const answer = document.getElementById('equals')
-const decimal = document.getElementById('decimal')
-const buttons = document.getElementsByClassName('button')
-const backspace = document.getElementById('backspace')
+const answer = document.getElementById('equals');
+const decimal = document.getElementById('decimal');
+const buttons = document.getElementsByClassName('button');
+const backspace = document.getElementById('backspace');
+const negative = document.getElementById('negative');
 
 // Calculator Object
 
@@ -76,11 +77,12 @@ for (let i = 0; i < operators.length; i++) {
     } else if (calculator.operator !== `` && calculator.numTwo == `` ){
         calculator.operator = operators[i].innerHTML
         history.innerHTML = `${calculator.numOne} ${calculator.operator}`
-    } else if (calculator.operator == `` && calculator.numTwo == ``) {
+    } else if (calculator.operator == `` && calculator.numTwo == `` && calculator.numOne !== ``) {
             calculator.operator = operators[i].innerHTML
             history.innerHTML = `${calculator.numOne} ${calculator.operator}`
-            
-        
+            display.innerHTML = ``
+
+    
     }
     })
 }
@@ -116,6 +118,36 @@ for (let i = 0; i < operators.length; i++) {
         }
     }) 
 
+// +/- button
+
+negative.addEventListener('click', function(event){
+if (calculator.numOne >= 1 && calculator.operator == `` ){
+    let neg = '-'
+    neg += calculator.numOne
+    console.log(neg)
+    calculator.numOne = neg
+    display.innerHTML = neg
+} else if ( calculator.numOne <= 1  && calculator.operator == `` ) {
+    let pos = calculator.numOne.replaceAll('-', '') 
+    calculator.numOne = pos
+    console.log(pos)
+    display.innerHTML = pos
+
+}
+if (calculator.numTwo >= 1 && calculator.operator !== ``){
+    let neg = '-'
+    neg += calculator.numTwo
+    console.log(neg)
+    calculator.numTwo = neg
+    display.innerHTML = neg
+} else if (calculator.numTwo <= 1 && calculator.operator !== ``){
+    let pos = calculator.numTwo.replaceAll('-', '') 
+    calculator.numTwo = pos
+    console.log(pos)
+    display.innerHTML = pos
+}
+})
+
 //Answer button logic
 
     answer.addEventListener('click', function(event) {
@@ -130,9 +162,9 @@ for (let i = 0; i < operators.length; i++) {
         if ((calculator.numTwo == ``)&&(calculator.operator == ``) ) {
             console.log('nothing')
         }
-            operate(calculator.numOne, calculator.operator, calculator.numTwo);
-            calculator.numTwo = ``
-        display.innerHTML = calculator.numTwo
+        operate(calculator.numOne, calculator.operator, calculator.numTwo);
+        calculator.numTwo = ``
+        display.innerHTML = calculator.numOne
         calculator.operator = ``
 
     })
