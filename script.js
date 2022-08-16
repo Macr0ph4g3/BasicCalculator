@@ -120,13 +120,16 @@ for (let i = 0; i < operators.length; i++) {
 
     answer.addEventListener('click', function(event) {
         console.log(`Pressed Equals: ${calculator.numOne} ${calculator.operator} ${calculator.numTwo}`);
-        if (calculator.numTwo == 0) {
+        if (calculator.numTwo == 0 && calculator.operator == '/' ) {
             console.log('Impossible')
             display.innerHTML = 'Impossible';
             console.log('test')
             calculator.numTwo = ``;
             return `You Fool!`;
         }           
+        if ((calculator.numTwo == ``)&&(calculator.operator == ``) ) {
+            console.log('nothing')
+        }
             operate(calculator.numOne, calculator.operator, calculator.numTwo);
             calculator.numTwo = ``
         display.innerHTML = calculator.numTwo
